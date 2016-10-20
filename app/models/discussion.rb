@@ -3,6 +3,10 @@ class Discussion < ApplicationRecord
   belongs_to :parent, :class_name => "Discussion", :optional => true
   has_many :children, :class_name => "Discussion", :foreign_key => "parent_id"
 
+	def readonly?
+	  !new_record?
+	end
+
   def descendents
     children.map do |child|
       [child] + child.descendents
