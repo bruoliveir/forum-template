@@ -8,8 +8,27 @@ class Discussion < ApplicationRecord
 	end
 
   def descendents
-    children.map do |child|
-      [child] + child.descendents
-    end.flatten
+    self_and_descendents - [self]
+  end
+
+  def self_and_descendents
+    self.class.tree_for(self)
+  end
+
+  def self.tree_for(instance)
+    tree_sql =  <<-SQL
+      WITH RECURSIVE search_tree(id, path) AS (
+          SELECT id, [id]
+          FROM #{table_name}
+          WHERE id = #{instance.id}
+        UNION ALL
+          SELECT #{table_name}.id, path || #{table_name}.id
+          FROM search_tree
+          JOIN #{table_name} ON #{table_name}.parent_id = search_tree.id
+          WHERE NOT #{table_name}.id IN (path)
+      )
+      SELECT id FROM search_tree ORDER BY path
+    SQL
+    where("#{table_name}.id IN (#{tree_sql})")
   end
 end
