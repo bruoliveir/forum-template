@@ -1,24 +1,30 @@
-# README
+# Forum template
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This Ruby on Rails forum template covers the following:
 
-Things you may want to cover:
+* Tree structure (using the Adjacency List plus Recursive Query approach)
+* Language censorship...
+* Updates via e-mail...
 
-* Ruby version
+## Prerequisites
 
-* System dependencies
+* Ruby 2.3.1 ([Setup using ruby-install + chruby and reasons to avoid RVM](http://ryanbigg.com/2014/10/ubuntu-ruby-ruby-install-chruby-and-you/))
+* (Ubuntu only) Install the `libsqlite3-dev` package
 
-* Configuration
+## Configuration
 
-* Database creation
+* Run `bundle install` to install all dependencies.
+* To create and populate the database, run:
 
-* Database initialization
+```
+#!sh
+rails db:setup
+rails db:seed
+```
 
-* How to run the test suite
+* Execute `rails s` to start the server.
 
-* Services (job queues, cache servers, search engines, etc.)
+## Tests
 
-* Deployment instructions
+Run `rails test:models`...
 
-* ...
