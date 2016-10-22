@@ -3,6 +3,10 @@ class Discussion < ApplicationRecord
   belongs_to :parent, :class_name => "Discussion", :optional => true
   has_many :children, :class_name => "Discussion", :foreign_key => "parent_id"
 
+  validates :user_id, presence: true
+  validates :title, presence: true
+  validates :body, presence: true
+
   scope :roots, -> {
     where(:parent_id => nil)
   }
