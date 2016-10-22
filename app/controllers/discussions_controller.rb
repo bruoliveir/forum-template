@@ -11,11 +11,7 @@ class DiscussionsController < ApplicationController
   end
 
   def show
-    @root_discussion = Discussion.find(params[:id])
-
-    if (!@root_discussion.parent.nil?) then
-      render json: { error: 'not a root discussion' }
-    end
+    @root_discussion = Discussion.roots.find(params[:id])
   end
 
   def new
