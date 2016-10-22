@@ -3,6 +3,14 @@ class Discussion < ApplicationRecord
   belongs_to :parent, :class_name => "Discussion", :optional => true
   has_many :children, :class_name => "Discussion", :foreign_key => "parent_id"
 
+  scope :roots, -> {
+    where(:parent_id => nil)
+  }
+
+  scope :branches, -> {
+    where.not(:parent_id => nil)
+  }
+
 	def readonly?
 	  !new_record?
 	end
