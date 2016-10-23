@@ -4,7 +4,10 @@ class DiscussionsController < ApplicationController
     @root_discussions = Discussion.roots
 
     sorted_root_discussions = @root_discussions.sort do |a, b|
-      b.descendents.sort_by(&:created_at).last.created_at <=> a.descendents.sort_by(&:created_at).last.created_at
+      a_descendents = a.descendents
+      b_descendents = b.descendents
+      (!b_descendents.empty? ? b_descendents.sort_by(&:created_at).last.created_at : b.created_at) <=>
+      (!a_descendents.empty? ? a_descendents.sort_by(&:created_at).last.created_at : a.created_at)
     end
 
     render json: sorted_root_discussions
