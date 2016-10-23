@@ -14,7 +14,7 @@ This Ruby on Rails forum template covers the following:
 
 ## Configuration
 
-* Run `bundle install` to install all dependencies.
+* Run `bundle install --without production` to install all dependencies.
 * To create and populate the database, run:
 
 ```
@@ -27,7 +27,36 @@ rails db:seed
 
 ## Tests
 
-Run `rails test:models`...
+Run `rails test:models` to test models and `rails test:integration` to test controller methods.
+
+## API
+
+### /discussions
+
+* Method: GET
+* Response: array of discussion objects ordered by last updated
+
+### /discussions/:id
+
+* Method: GET
+* Response: discussion object including all descendents
+
+### /discussions
+
+* Method: POST
+* Body: (application/json)
+```
+#!json
+{
+  "discussion": {
+    "title": "Root discussion",
+    "body": "Content",
+    "user_id": 1,
+    "parent_id": 1 (optional, only when creating a branch)
+  }
+}
+```
+* Response: newly created discussion object or error messages
 
 ## References
 
@@ -37,4 +66,5 @@ Run `rails test:models`...
     * https://chaione.com/blog/modeling-a-tree-of-data-in-rails/
     * https://hashrocket.com/blog/posts/recursive-sql-in-activerecord (chosen solution)
     * http://stackoverflow.com/questions/192220/what-is-the-most-efficient-elegant-way-to-parse-a-flat-table-into-a-tree/192462#192462
-
+    * http://stackoverflow.com/questions/20815817/adjacency-data-structure-to-nested-hash (no answer... could help reduce number of queries to show a subtree)
+* [Learn Web Development with Rails](https://www.railstutorial.org/book/) by Michael Hartl
