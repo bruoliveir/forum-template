@@ -14,9 +14,19 @@ class DiscussionsController < ApplicationController
     @root_discussion = Discussion.roots.find(params[:id])
   end
 
-  def new
+  def create
+    @discussion = Discussion.new(discussion_params)
+
+    if @discussion.save
+      render json: @discussion
+    else
+      render json: { error: @discussion.errors }
+    end
   end
 
-  def create
-  end
+  private
+
+    def discussion_params
+      params.require(:discussion).permit(:parent_id, :user_id, :title, :body)
+    end
 end
