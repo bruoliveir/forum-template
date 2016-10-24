@@ -2,7 +2,7 @@
 
 This Ruby on Rails forum template covers the following:
 
-* Tree structure (using the Adjacency List plus Recursive Query approach)
+* Tree structure (Path Enumeration)
 * Language censorship...
 * Updates via e-mail...
 * Pagination...
@@ -44,7 +44,8 @@ Run `rails test:models` to test models and `rails test:integration` to test cont
 ### /discussions
 
 * Method: POST
-* Body: (application/json)
+* Response: newly created discussion object or error messages
+* Request body (application/json):
 ```
 #!json
 {
@@ -52,19 +53,17 @@ Run `rails test:models` to test models and `rails test:integration` to test cont
     "title": "Root discussion",
     "body": "Content",
     "user_id": 1,
-    "parent_id": 1 (optional, only when creating a branch)
+    "parent_id": 1 optional
   }
 }
 ```
-* Response: newly created discussion object or error messages
 
 ## References
 
-* Recursive data (tree) structures: by comparison, the Adjacency List approach combined with a recursive query is a simple and efficient solution for reading and writing within a tree structure
+* Recursive data (tree) structures: the Adjacency List approach combined with a recursive query *has been replaced* by the Path Enumeration approach which resulted in better performance and eliminated database limitations
     * http://www.gmarik.info/blog/2012/recursive-data-structures-with-rails/
     * https://www.leighhalliday.com/tree-structures-in-your-rails-models
     * https://chaione.com/blog/modeling-a-tree-of-data-in-rails/
-    * https://hashrocket.com/blog/posts/recursive-sql-in-activerecord (chosen solution)
+    * https://hashrocket.com/blog/posts/recursive-sql-in-activerecord
     * http://stackoverflow.com/questions/192220/what-is-the-most-efficient-elegant-way-to-parse-a-flat-table-into-a-tree/192462#192462
-    * http://stackoverflow.com/questions/20815817/adjacency-data-structure-to-nested-hash (no answer... could help reduce number of queries to show a subtree)
 * [Learn Web Development with Rails](https://www.railstutorial.org/book/) by Michael Hartl

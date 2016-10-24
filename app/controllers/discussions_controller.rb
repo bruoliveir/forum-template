@@ -1,23 +1,20 @@
 class DiscussionsController < ApplicationController
 
-  def index
-    @root_discussions = Discussion.roots
+  ITEMS_PER_PAGE = 10
 
-    sorted_root_discussions = @root_discussions.sort do |a, b|
-      b.self_and_descendents.sort_by(&:created_at).last.created_at <=>
-      a.self_and_descendents.sort_by(&:created_at).last.created_at
+  def index
+    most_recent_per_root = Discussion.most_recent_per_root.limit(ITEMS_PER_PAGE).offset((params[:page].to_i - 1) * ITEMS_PER_PAGE)
+
+    @last_updated_discussions = most_recent_per_root.map do |d|
+      d.ancestors.limit(1)
     end
 
-    items_per_page = 10
-
-    first = (params[:page].to_i - 1) * items_per_page
-    last = first + items_per_page - 1
-
-    render json: sorted_root_discussions[first..last]
+    render json: @last_updated_discussions
   end
 
   def show
-    @root_discussion = Discussion.roots.find(params[:id])
+    @self_and_descendants = Discussion.most_recent_per_root.find(params[:id]).descendants
+    render json: @self_and_descendants
   end
 
   def create
@@ -33,6 +30,6 @@ class DiscussionsController < ApplicationController
   private
 
     def discussion_params
-      params.require(:discussion).permit(:parent_id, :user_id, :title, :body)
+      params.require(:discussion).permit(:user_id, :title, :body, :path)
     end
 end

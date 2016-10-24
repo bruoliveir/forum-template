@@ -5,5 +5,5 @@ def create_discussions_json(json, root_discussion, parent)
   end
 end
 
-json.merge! @root_discussion.attributes
+json.merge! @self_and_descendants.attributes
 create_discussions_json(json, @root_discussion, nil)
