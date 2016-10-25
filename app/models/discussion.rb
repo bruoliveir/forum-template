@@ -1,46 +1,45 @@
 class Discussion < ApplicationRecord
-  belongs_to :user, :optional => true
-  belongs_to :parent, :class_name => "Discussion", :optional => true
-  has_many :children, :class_name => "Discussion", :foreign_key => "parent_id"
+  belongs_to :user, optional: true
 
   validates :user_id, presence: true
   validates :title, presence: true
   validates :body, presence: true
 
-  scope :roots, -> {
-    where(:parent_id => nil)
-  }
+  PATH_DELIMITER = '.'
 
-  scope :branches, -> {
-    where.not(:parent_id => nil)
-  }
-
-	def readonly?
-	  !new_record?
-	end
-
-  def descendents
-    self_and_descendents - [self]
+  after_create do
+    (self.path ||= '') << self.class.encode_path(self.id.to_s)
+    self.save
   end
 
-  def self_and_descendents
-    self.class.tree_for(self)
+  scope :most_recent_per_root, -> {
+    group("SUBSTR(path, 2, SUBSTR(path, 1, 1))").reorder("created_at DESC")
+  }
+
+  def readonly?
+    !path_changed? && !new_record?
   end
 
-  def self.tree_for(instance)
-    tree_sql =  <<-SQL
-      WITH RECURSIVE search_tree(id, path) AS (
-          SELECT id, [id]
-          FROM #{table_name}
-          WHERE id = #{instance.id}
-        UNION ALL
-          SELECT #{table_name}.id, path || #{table_name}.id
-          FROM search_tree
-          JOIN #{table_name} ON #{table_name}.parent_id = search_tree.id
-          WHERE NOT #{table_name}.id IN (path)
-      )
-      SELECT id FROM search_tree ORDER BY path
-    SQL
-    where("#{table_name}.id IN (#{tree_sql})")
+  def descendants
+    Discussion.where("path LIKE ? || '%'", path)
+  end
+
+  def ancestors
+    Discussion.where("? LIKE path || '%'", path)
+  end
+
+  def self.encode_path(path)
+    path = path.to_i.to_s(36)
+    length = path.length.to_s(36)
+    length + path
+  end
+
+  def self.decode_path(path)
+    path = path.dup
+    while !path.empty?
+      length = path.slice!(0).to_i(36).to_s(10).to_i
+      (result ||= '') << path.slice!(0, length).to_i(36).to_s(10) + PATH_DELIMITER
+    end
+    result
   end
 end

@@ -10,14 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161020032252) do
+ActiveRecord::Schema.define(version: 20161024031658) do
 
   create_table "discussions", force: :cascade do |t|
-    t.integer  "parent_id"
     t.integer  "user_id"
     t.string   "title"
     t.string   "body"
     t.datetime "created_at", null: false
+    t.string   "path"
+    t.index ["path"], name: "index_discussions_on_path"
   end
 
   create_table "users", force: :cascade do |t|
