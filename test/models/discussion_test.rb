@@ -3,7 +3,7 @@ require 'test_helper'
 class DiscussionTest < ActiveSupport::TestCase
   def setup
     @user = users(:example)
-    @discussion = Discussion.create(:title => "Root thread", :body => "Body content", :user => @user)
+    @discussion = Discussion.create(:title => "1.", :body => "body", :user => @user)
   end
 
   test "should not be deleted" do
@@ -37,25 +37,25 @@ class DiscussionTest < ActiveSupport::TestCase
     assert_not @discussion.valid?
   end
 
-  test "should have descendents 1 level deep" do
-    subthreadA = Discussion.create(:title => "Root.A", :body => "Content", :user => @user, :parent => @discussion)
-    subthreadB = Discussion.create(:title => "Root.B", :body => "Content", :user => @user, :parent => @discussion)
+  test "should have descendants 1 level deep" do
+    discussion_1_2 = Discussion.create(:title => "1.2.", :body => "body", :user => @user, :path => @discussion.path)
+    discussion_1_3 = Discussion.create(:title => "1.3.", :body => "body", :user => @user, :path => @discussion.path)
     
-    assert @discussion.descendents == [subthreadA, subthreadB]
+    assert @discussion.descendants == [@discussion, discussion_1_2, discussion_1_3]
   end
 
-  test "should have descendents 2 levels deep" do
-    subthreadA = Discussion.create(:title => "Root.A", :body => "Content", :user => @user, :parent => @discussion)
-    subthreadB = Discussion.create(:title => "Root.A.B", :body => "Content", :user => @user, :parent => subthreadA)
+  test "should have descendants 2 levels deep" do
+    discussion_1_2 = Discussion.create(:title => "1.2.", :body => "body", :user => @user, :path => @discussion.path)
+    discussion_1_2_3 = Discussion.create(:title => "1.2.3.", :body => "body", :user => @user, :path => discussion_1_2.path)
     
-    assert @discussion.descendents == [subthreadA, subthreadB]
+    assert @discussion.descendants == [@discussion, discussion_1_2, discussion_1_2_3]
   end
 
-  test "should have descendents 3 levels deep" do
-    subthreadA = Discussion.create(:title => "Root.A", :body => "Content", :user => @user, :parent => @discussion)
-    subthreadB = Discussion.create(:title => "Root.A.B", :body => "Content", :user => @user, :parent => subthreadA)
-    subthreadC = Discussion.create(:title => "Root.A.B.C", :body => "Content", :user => @user, :parent => subthreadB)
+  test "should have descendants 3 levels deep" do
+    discussion_1_2 = Discussion.create(:title => "1.2.", :body => "body", :user => @user, :path => @discussion.path)
+    discussion_1_2_3 = Discussion.create(:title => "1.2.3.", :body => "body", :user => @user, :path => discussion_1_2.path)
+    discussion_1_2_3_4 = Discussion.create(:title => "1.2.3.4.", :body => "body", :user => @user, :path => discussion_1_2_3.path)
     
-    assert @discussion.descendents == [subthreadA, subthreadB, subthreadC]
+    assert @discussion.descendants == [@discussion, discussion_1_2, discussion_1_2_3, discussion_1_2_3_4]
   end
 end

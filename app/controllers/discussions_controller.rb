@@ -6,14 +6,15 @@ class DiscussionsController < ApplicationController
     most_recent_per_root = Discussion.most_recent_per_root.limit(ITEMS_PER_PAGE).offset((params[:page].to_i - 1) * ITEMS_PER_PAGE)
 
     @last_updated_discussions = most_recent_per_root.map do |d|
-      d.ancestors.limit(1)
+      d.ancestors.limit(1).first
     end
 
     render json: @last_updated_discussions
   end
 
   def show
-    @self_and_descendants = Discussion.most_recent_per_root.find(params[:id]).descendants
+    @self_and_descendants = Discussion.find(params[:id]).descendants
+
     render json: @self_and_descendants
   end
 

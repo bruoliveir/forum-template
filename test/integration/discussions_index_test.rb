@@ -3,13 +3,13 @@ require 'test_helper'
 class DiscussionsIndexTest < ActionDispatch::IntegrationTest
   def setup
     @user = users(:example)
-    @discussion = Discussion.create(:title => "Root discussion", :body => "Content", :user => @user)
+    @discussion = Discussion.create(:title => "1.", :body => "body", :user => @user)
   end
 
-  test "should order discussions by most recent self or descendents" do
-    another_discussion = Discussion.create(:title => "Another root discussion", :body => "Content", :user => @user)
-    yet_another_discussion = Discussion.create(:title => "Yet another root discussion", :body => "Content", :user => @user)
-    Discussion.create(:title => "Branch of another_discussion", :body => "Content", :user => @user, :parent => another_discussion)
+  test "should order discussions by most recently updated" do
+    discussion_2 = Discussion.create(:title => "2.", :body => "body", :user => @user)
+    discussion_3 = Discussion.create(:title => "3.", :body => "body", :user => @user)
+    Discussion.create(:title => "2.4.", :body => "body", :user => @user, :path => discussion_2.path)
 
     get discussions_path
     follow_redirect!

@@ -7,7 +7,10 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 def create_discussion(discussion, parent)
-  d = Discussion.create!(:title => discussion['title'], :body => discussion['body'], :user_id => discussion['user_id'], :path => parent ? parent['path'] : nil)
+  d = Discussion.create!(:title => discussion['title'],
+                         :body => discussion['body'],
+                         :user_id => discussion['user_id'],
+                         :path => parent ? parent['path'] : nil)
   discussion['children'].each do |discussion|
     create_discussion(discussion, d)
   end unless discussion['children'].nil?
