@@ -2,27 +2,21 @@
 
 This Ruby on Rails forum template covers the following:
 
-* Tree structure (Path Enumeration)
+* Tree data structure using Path Enumeration (sorting resolved through base 32 enconding)
 * Language censorship...
 * Updates via e-mail...
 * Pagination...
 
 ## Prerequisites
 
-* Ruby 2.3.1 ([Setup using ruby-install + chruby and reasons to avoid RVM](http://ryanbigg.com/2014/10/ubuntu-ruby-ruby-install-chruby-and-you/))
+* Ruby 2.3.1
+    * [Ubuntu, Ruby, ruby-install, chruby, Rails and You](http://ryanbigg.com/2014/10/ubuntu-ruby-ruby-install-chruby-and-you/): setup using ruby-install + chruby and reasons to avoid RVM
 * (Ubuntu only) Install the `libsqlite3-dev` package
 
 ## Configuration
 
 * Run `bundle install --without production` to install all dependencies.
-* To create and populate the database, run:
-
-```
-#!sh
-rails db:setup
-rails db:seed
-```
-
+* To create and populate the database, run `rails db:setup`.
 * Execute `rails s` to start the server.
 
 ## Tests
@@ -47,23 +41,25 @@ Run `rails test:models` to test models and `rails test:integration` to test cont
 * Response: newly created discussion object or error messages
 * Request body (application/json):
 ```
-#!json
+#!js
 {
   "discussion": {
-    "title": "Root discussion",
-    "body": "Content",
+    "title": "Title",
+    "body": "Body",
     "user_id": 1,
-    "parent_id": 1 optional
+    "path": 11 // optional, MUST be base 32 encoded
+
   }
 }
 ```
 
 ## References
 
-* Recursive data (tree) structures: the Adjacency List approach combined with a recursive query *has been replaced* by the Path Enumeration approach which resulted in better performance and eliminated database limitations
-    * http://www.gmarik.info/blog/2012/recursive-data-structures-with-rails/
-    * https://www.leighhalliday.com/tree-structures-in-your-rails-models
-    * https://chaione.com/blog/modeling-a-tree-of-data-in-rails/
-    * https://hashrocket.com/blog/posts/recursive-sql-in-activerecord
-    * http://stackoverflow.com/questions/192220/what-is-the-most-efficient-elegant-way-to-parse-a-flat-table-into-a-tree/192462#192462
+* Recursive data (tree) structures: the Adjacency List approach combined with a recursive query *has been replaced* by the Path Enumeration approach combined with which resulted in better performance and eliminated database limitations
+    * [Storing hierarchical data: Materialized Path](https://bojanz.wordpress.com/2014/04/25/storing-hierarchical-data-materialized-path/)
+    * [Recursive data structures with Rails](http://www.gmarik.info/blog/2012/recursive-data-structures-with-rails/)
+    * [Tree Structures in your Rails models](https://www.leighhalliday.com/tree-structures-in-your-rails-models)
+    * [Modeling a Tree of Data in Rails](https://chaione.com/blog/modeling-a-tree-of-data-in-rails/)
+    * [https://hashrocket.com/blog/posts/recursive-sql-in-activerecord](https://hashrocket.com/blog/posts/recursive-sql-in-activerecord)
+    * [What is the most efficient/elegant way to parse a flat table into a tree?](http://stackoverflow.com/questions/192220/what-is-the-most-efficient-elegant-way-to-parse-a-flat-table-into-a-tree/192462#192462)
 * [Learn Web Development with Rails](https://www.railstutorial.org/book/) by Michael Hartl
