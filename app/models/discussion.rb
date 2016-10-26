@@ -1,4 +1,6 @@
 class Discussion < ApplicationRecord
+  include ProfanityFilter
+
   belongs_to :user, optional: true
 
   validates :user_id, presence: true
@@ -6,6 +8,11 @@ class Discussion < ApplicationRecord
   validates :body, presence: true
 
   PATH_DELIMITER = '.'
+
+  after_find do
+    self.title = clean(self.title)
+    self.body = clean(self.body)
+  end
 
   after_create do
     (self.path ||= '') << self.class.encode_path(self.id.to_s)

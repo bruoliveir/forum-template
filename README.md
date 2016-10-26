@@ -2,10 +2,10 @@
 
 This Ruby on Rails forum template covers the following:
 
-* Tree data structure using Path Enumeration (sorting resolved through base 32 enconding)
-* Language censorship...
+* Tree data structure using Path Enumeration (sorting resolved through base 36 enconding)
+* Language censorship based upon [profanity_filter](https://github.com/intridea/profanity_filter)
 * Updates via e-mail...
-* Pagination...
+* Pagination
 
 ## Prerequisites
 
@@ -47,7 +47,7 @@ Run `rails test:models` to test models and `rails test:integration` to test cont
     "title": "Title",
     "body": "Body",
     "user_id": 1,
-    "path": 11 // optional, MUST be base 32 encoded
+    "path": 11 // optional, MUST be base 36 encoded
 
   }
 }
@@ -60,6 +60,10 @@ Run `rails test:models` to test models and `rails test:integration` to test cont
     * [Recursive data structures with Rails](http://www.gmarik.info/blog/2012/recursive-data-structures-with-rails/)
     * [Tree Structures in your Rails models](https://www.leighhalliday.com/tree-structures-in-your-rails-models)
     * [Modeling a Tree of Data in Rails](https://chaione.com/blog/modeling-a-tree-of-data-in-rails/)
-    * [https://hashrocket.com/blog/posts/recursive-sql-in-activerecord](https://hashrocket.com/blog/posts/recursive-sql-in-activerecord)
+    * [Using Recursive SQL with ActiveRecord trees](https://hashrocket.com/blog/posts/recursive-sql-in-activerecord)
     * [What is the most efficient/elegant way to parse a flat table into a tree?](http://stackoverflow.com/questions/192220/what-is-the-most-efficient-elegant-way-to-parse-a-flat-table-into-a-tree/192462#192462)
+* Language censorship
+    * [How can I gsub an array in ruby?](https://www.quora.com/How-can-I-gsub-an-array-in-ruby)
+    * [profanity_filter](https://github.com/intridea/profanity_filter)
+    * [List of Dirty, Naughty, Obscene, and Otherwise Bad Words](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words)
 * [Learn Web Development with Rails](https://www.railstutorial.org/book/) by Michael Hartl
