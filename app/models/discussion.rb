@@ -20,7 +20,7 @@ class Discussion < ApplicationRecord
   end
 
   scope :most_recent_per_root, -> {
-    group("SUBSTR(path, 2, SUBSTR(path, 1, 1))").reorder("created_at DESC")
+    group("SUBSTR(path, 2, CAST(SUBSTR(path, 1, 1) AS INTEGER))").reorder("created_at DESC")
   }
 
   def readonly?
