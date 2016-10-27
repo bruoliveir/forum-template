@@ -19,8 +19,19 @@ class Discussion < ApplicationRecord
     self.save
   end
 
-  scope :most_recent_per_root, -> {
-    group("SUBSTR(path, 2, SUBSTR(path, 1, 1))").reorder("created_at DESC")
+  scope :most_recent_per_root, -> (limit, offset) {
+    find_by_sql(
+      "SELECT d.* FROM (
+        SELECT MAX(created_at) AS c,
+        SUBSTR(path, 1, CAST(SUBSTR(path, 1,1) AS INTEGER) + 1) AS p
+        FROM discussions
+        GROUP BY p
+      ) l
+      JOIN discussions d
+      ON l.p = d.path ORDER BY l.c DESC
+      LIMIT #{limit}
+      OFFSET #{offset}"
+    )
   }
 
   def readonly?

@@ -23,6 +23,8 @@ This Ruby on Rails forum template covers the following:
 
 Run `rails test:models` to test models and `rails test:integration` to test controller methods.
 
+To test everything, including lib modules, run `rails test`.
+
 ## API
 
 ### /discussions

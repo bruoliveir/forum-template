@@ -14,6 +14,6 @@ class DiscussionsIndexTest < ActionDispatch::IntegrationTest
     get discussions_path
     follow_redirect!
 
-    assert_equal JSON.parse(response.body).map { |d| d["id"] }, [2, 3, 1]
+    assert_equal [2, 3, 1], JSON.parse(response.body).map { |d| d["id"] }
   end
 end
