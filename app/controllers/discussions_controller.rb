@@ -3,11 +3,7 @@ class DiscussionsController < ApplicationController
   ITEMS_PER_PAGE = 10
 
   def index
-    most_recent_per_root = Discussion.most_recent_per_root.limit(ITEMS_PER_PAGE).offset((params[:page].to_i - 1) * ITEMS_PER_PAGE)
-
-    @last_updated_discussions = most_recent_per_root.map do |d|
-      d.ancestors.limit(1).first
-    end
+    @last_updated_discussions = Discussion.most_recent_per_root(ITEMS_PER_PAGE, (params[:page].to_i - 1) * ITEMS_PER_PAGE)
 
     render json: @last_updated_discussions
   end
