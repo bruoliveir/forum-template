@@ -9,6 +9,12 @@ class Discussion < ApplicationRecord
 
   PATH_DELIMITER = '.'
 
+  after_save do
+    self.ancestors.first.descendants.each do |d|
+      DiscussionMailer.new_discussion_notification(d.user, self).deliver_later
+    end
+  end
+
   after_find do
     self.title = clean(self.title)
     self.body = clean(self.body)
